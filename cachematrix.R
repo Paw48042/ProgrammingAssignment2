@@ -11,7 +11,7 @@ makeCacheMatrix <- function(x = matrix()) {
   inverseMatrix <- NULL 
   
   # Setter function
-  set <- function(y){
+  set <- function(y = matrix()){
     x <<- y 
     inverseMatrix <<- NULL
   }
@@ -58,19 +58,17 @@ cacheSolve <- function(x, ...) {
   
   # If data is NULL, 
   data <- x$get() 
-  
-  # Check if data is n*n matrix
-  dimension <- dim(data) 
   # Try out the calculation with try catch so we handle error gracefully
   tryCatch({
     inverseMatrix <- solve(data) 
+    # set inverse matrix
+    x$setInverse(inverseMatrix)
+    # Return inverse matrix
+    return(inverseMatrix)
   },
-  error = function(){
-    message("Matrix may be singular or not square or zero row, col or else")
+  error = function(e){
+    # Print the error message
+    message(e)
   })
-  # set inverse matrix
-  x$setInverse(inverseMatrix)
-  
-  # Return inverse matrix
-  return(inverseMatrix)
+ 
 }
